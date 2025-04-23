@@ -1,5 +1,6 @@
 const taskConatiner = document.getElementById("app");
 
+
 class Task {
   constructor(name, description, dueDate) {
     this.id = Math.floor(Math.random() * 10000);
@@ -59,12 +60,25 @@ class Task {
 }
 
 // Lista de tareas mockeadas
+let tasks = [];
+if (typeof taskTitles !== 'undefined' && typeof taskDescriptions !== 'undefined' && typeof getRandomFutureDate !== 'undefined') {
 let tasks = taskTitles.map((title, index) => {
   return new Task(title, taskDescriptions[index], getRandomFutureDate());
 });
+}
 
 function loadData() {
   // implementar el renderizado de las tareas
+  if (tasks.length > 0) {
+      // implementar el renderizado de las tareas
+      taskConatiner.innerHTML = tasks
+        .map((task) =>
+          Task.buildTaskCard(task)
+        )
+        .join("");
+    } else {
+      taskConatiner.innerHTML = `<div class="text-center text-gray-400 text-2xl">No hay tareas</div>`;
+    }
 }
 
 function postData(event) {
@@ -72,6 +86,16 @@ function postData(event) {
 
   try {
     // Get form data
+    const taskNameInput = document.getElementById("task-name");
+    const taskDescriptionInput = document.getElementById("task-description");
+    const taskDueDateInput = document.getElementById("task-due-date");
+
+
+    const name = taskNameInput.value;
+    const description = taskDescriptionInput.value;
+    const dueDate = taskDueDateInput.value;
+
+
 
     saveTask(task);
     form.reset();
@@ -80,6 +104,7 @@ function postData(event) {
     showNotification("Tarea añadida correctamente!");
   } catch (error) {
     showNotification("Error al añadir la tarea. Inténtalo de nuevo.");
+
   }
 }
 
@@ -91,13 +116,15 @@ function postData(event) {
 
 function saveTask(task) {
   // implementar la creación de la tarea
-  console.log(task);
 
+  task.push(task);
+  console.log("tarea guardada", task);
   loadData();
 }
 
 function deleteTask(id) {
   // implementar la eliminación de la tarea
+
 
   loadData();
 }
